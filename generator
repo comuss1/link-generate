@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirect Link Generator</title>
+    <style>
+        body { font-family: sans-serif; padding: 2em; background: #f9f9f9; }
+        button { padding: 1em 2em; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Generate 400 Redirect HTML Files</h2>
+    <p>Click the button below to generate a ZIP file with 400 random redirect files.</p>
+    <button onclick="generate()">Download ZIP</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script>
+    async function generate() {
+        const zip = new JSZip();
+        const offerUrl = "https://comuss1.github.io/taiwan/";
+
+        for (let i = 0; i < 400; i++) {
+            const path = Math.random().toString(36).substring(2, 8);
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="refresh" content="0; url=${offerUrl}">
+<title>Redirect</title>
+</head>
+<body>
+<p>Redirecting...</p>
+</body>
+</html>`;
+            zip.file(path + ".html", html);
+        }
+
+        const content = await zip.generateAsync({type:"blob"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = "redirect_links.zip";
+        link.click();
+    }
+    </script>
+</body>
+</html>
